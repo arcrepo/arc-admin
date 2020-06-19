@@ -1,13 +1,42 @@
 import React, { useState } from "react";
-import { Card, Form, Input, Button, Checkbox, Row, Col } from "antd";
+import {
+  Card,
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  Row,
+  Col,
+  notification,
+} from "antd";
 
+import Cookie from "js-cookie";
 import Header from "../../components/Header";
+import { MakePOST } from "../../helpers/Request";
 
 export default (props) => {
   const [loading, setLoading] = useState(false);
 
-  const Login = () => {
+  const Login = (formData) => {
     setLoading(true);
+    MakePOST("/auth", {
+      authToken: formData.authToken,
+    }).then((data) => {
+      if (data) {
+        notification.success({
+          message: `Successfully logged in`,
+        });
+        setTimeout(() => {
+          Cookie.set("auth-token", formData.authToken);
+          window.location = "/";
+        }, 800);
+      } else {
+        notification.error({
+          message: `Invalid auth token`,
+        });
+      }
+      setLoading(false);
+    });
   };
 
   return (
@@ -15,16 +44,22 @@ export default (props) => {
       <Header />
       <div style={{ margin: 20 }}>
         <Row gutter={[16, 16]}>
-          <Col xs={24} md={10}>
+          <Col xs={24} md={12}>
             <Card title="Login">
-              <Form>
+              <Form
+                initialValues={{
+                  authToken: "",
+                  remember: false,
+                }}
+                onFinish={Login}
+              >
                 <Form.Item name="authToken">
                   <Input placeholder="Enter auth token" />
                 </Form.Item>
                 <Form.Item name="remember" valuePropName="checked">
                   <Checkbox>Remember me</Checkbox>
                 </Form.Item>
-                <Button type="primary" loading={loading} onClick={Login}>
+                <Button type="primary" loading={loading} htmlType="submit">
                   Login
                 </Button>
               </Form>
