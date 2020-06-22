@@ -11,7 +11,7 @@ export default (props) => {
             <img src="/assets/text-logo.png" width="60em" />
           </a>
         }
-        subTitle={props.subTitle || "iOS Package Mangement"}
+        subTitle={props.subTitle || "iOS Package Manager"}
         extra={[
           <Button icon={<TwitterOutlined />} style={{ color: "#1da1f2" }} />,
           <Button icon={<GithubOutlined />} style={{ color: "#333" }} />,
