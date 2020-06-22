@@ -1,14 +1,15 @@
 import React from "react";
-import { Button } from "antd";
-import { HashRouter, Link, Route } from "react-router-dom";
+import { HashRouter, Route } from "react-router-dom";
+import Cookie from "js-cookie";
 import Auth from "./screens/Auth";
 import Home from "./screens/Home";
+import Dashboard from "./screens/Dashboard";
 
 function App() {
   return (
     <HashRouter>
       <Route path="/" exact>
-        <Home />
+        {Cookie.get("auth-token") ? <Dashboard /> : <Home />}
       </Route>
 
       <Route path="/login">
